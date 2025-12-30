@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بروفايل خالد يوسف</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --bg: #fdfaf4; --card: rgba(255,255,255,0.98); --text: #333; --sub: #666; --yt: #FF0000; --tiktok: #000000; --accent: #2ecc71; --work: #3498db; }
+        [data-theme="dark"] { --bg: #0d1117; --card: rgba(22,27,34,0.98); --text: #f0f6fc; --sub: #8b949e; --tiktok: #000000; }
+        
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', Tahoma, sans-serif; transition: 0.3s; }
+        #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-color: var(--bg); transition: 0.6s; }
+        
+        .controls { position: fixed; top: 20px; left: 20px; display: flex; gap: 10px; z-index: 1000; }
+        .control-btn { background: var(--card); border: 1px solid var(--sub); color: var(--text); width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); font-weight: bold; transition: 0.3s; }
+        
+        .visitor-counter { background: var(--card); padding: 5px 15px; border-radius: 20px; border: 1px solid var(--sub); font-size: 12px; color: var(--text); display: flex; align-items: center; gap: 8px; margin: 15px auto; display: inline-flex; }
+
+        .main-container { display: flex; justify-content: center; align-items: center; height: 100vh; overflow-y: auto; padding: 20px; box-sizing: border-box; }
+        .profile-card { background: var(--card); backdrop-filter: blur(20px); border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); width: 380px; padding: 30px; text-align: center; border: 1px solid rgba(255,255,255,0.2); margin: auto; position: relative; }
+        .profile-img { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 4px solid #000; margin-bottom: 10px; }
+        .name { font-size: 24px; font-weight: 800; color: var(--text); margin: 0; }
+        .description { background: rgba(0,0,0,0.04); padding: 15px; border-radius: 15px; font-size: 13px; line-height: 1.6; margin-bottom: 20px; color: var(--text); border-right: 4px solid var(--accent); margin-top: 15px; text-align: right;}
+        [lang="en"] .description { border-right: none; border-left: 4px solid var(--accent); text-align: left; }
+
+        .accordion { width: 100%; }
+        .acc-item { margin-bottom: 8px; border-radius: 15px; overflow: hidden; border: 1px solid rgba(0,0,0,0.05); }
+        .acc-header { width: 100%; padding: 15px; background: var(--card); border: none; outline: none; text-align: inherit; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 15px; color: var(--text); }
+        .acc-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out; background: rgba(0,0,0,0.01); }
+        
+        .skills-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 15px; }
+        .skill-item { background: var(--accent); color: white; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: bold; }
+        
+        .social-links { display: flex; flex-direction: column; gap: 10px; padding: 15px; }
+        .link-row { display: flex; gap: 8px; align-items: center; }
+        .btn { flex: 1; padding: 12px; border-radius: 12px; text-decoration: none; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; color: white; }
+        .btn-yt { background: var(--yt); }
+        .btn-tt { background: var(--tiktok); color: #fff; border: 1px solid #444; }
+        .copy-btn { width: 40px; height: 44px; border-radius: 12px; border: 1px solid #ddd; background: #fff; cursor: pointer; color: #333; }
+
+        .work-list { display: flex; flex-direction: column; gap: 10px; padding: 15px; }
+        .work-item { background: rgba(52, 152, 219, 0.05); border: 1px dashed var(--work); padding: 10px; border-radius: 12px; text-align: inherit; }
+        .work-item h4 { margin: 0; font-size: 13px; color: var(--work); }
+        .view-link { color: var(--work); text-decoration: none; font-size: 11px; font-weight: bold; display: block; margin-top: 5px; }
+
+        #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 20px; font-size: 12px; opacity: 0; transition: 0.4s; z-index: 2000; }
+        .rotate { transform: rotate(180deg); }
+        i.fa-chevron-down { transition: 0.3s; }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <button class="control-btn" id="themeBtn"><i class="fas fa-moon" id="themeIcon"></i></button>
+        <button class="control-btn" id="langBtn">EN</button>
+    </div>
+
+    <div id="canvas-container"><canvas id="particleCanvas"></canvas></div>
+    <div id="toast">تم النسخ بنجاح! ✅</div>
+
+    <div class="main-container">
+        <div class="profile-card">
+            <img src="https://i.postimg.cc/7LBSch3F/WIN-14470705-10-40-08-Pro.jpg" class="profile-img">
+            <h2 class="name" id="name">خالد يوسف</h2>
+            
+            <div class="visitor-counter">
+                <i class="fas fa-eye"></i>
+                <span id="label-visitors">الزوار:</span>
+                <img src="https://profile-counter.glitch.me/khalid-yusuf-new/count.svg" alt="Visitor Count" style="height: 20px;">
+            </div>
+
+            <div class="description" id="description">مهتم بمساعدة الجميع من خلال خبرتي التقنية، أسعى لتوظيف مهاراتي في البرمجة والأمن السيبراني لبناء بيئة رقمية آمنة وحلول مبتكرة تخدم المجتمع.</div>
+
+            <div class="accordion">
+                <div class="acc-item">
+                    <button class="acc-header" onclick="playClick()">
+                        <span><i class="fas fa-star" style="color:#f1c40f"></i> <span id="label-skills">المهارات</span></span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="acc-content">
+                        <div class="skills-list">
+                            <span class="skill-item">I speak English</span>
+                            <span class="skill-item">Good at HTML</span>
+                            <span class="skill-item">Cyber Security</span>
+                            <span class="skill-item">Video Editing</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="acc-item">
+                    <button class="acc-header" onclick="playClick()">
+                        <span><i class="fas fa-envelope" style="color:#e67e22"></i> <span id="label-contact">تواصل معي</span></span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="acc-content">
+                        <div class="social-links">
+                            <div class="link-row">
+                                <a href="https://www.youtube.com/@Khalid-s6o9t" target="_blank" class="btn btn-yt" id="label-yt">يوتيوب</a>
+                                <button class="copy-btn" onclick="copyText('https://www.youtube.com/@Khalid-s6o9t')"><i class="fas fa-copy"></i></button>
+                            </div>
+                            <div class="link-row">
+                                <a href="https://www.tiktok.com/@.q76x" target="_blank" class="btn btn-tt" id="label-tt">تيك توك</a>
+                                <button class="copy-btn" onclick="copyText('https://www.tiktok.com/@.q76x')"><i class="fas fa-copy"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="acc-item">
+                    <button class="acc-header" onclick="playClick()">
+                        <span><i class="fas fa-briefcase" style="color:#3498db"></i> <span id="label-work">أعمالي</span></span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="acc-content">
+                        <div class="work-list">
+                            <div class="work-item">
+                                <h4 id="work1-title">اختبار الإنجليزية 2024</h4>
+                                <a href="https://i.postimg.cc/Vk3PQMLN/Whats_App_Image_2025_12_30_at_1_59_39_PM.jpg" target="_blank" class="view-link label-view">فتح الملف</a>
+                            </div>
+                            <div class="work-item">
+                                <h4 id="work2-title">شهادة الإنجليزية 2025</h4>
+                                <a href="https://i.postimg.cc/xjKvKSbW/Level-2-Midterm-Report-Khalid-Yusuf.png" target="_blank" class="view-link label-view">فتح الشهادة</a>
+                            </div>
+                            <div class="work-item">
+                                <h4 id="work3-title">المركز الأول 2023</h4>
+                                <a href="https://i.postimg.cc/4dGdGjNQ/Whats-App_Image_2025_10_20_at_1_40_33_PM.jpg" target="_blank" class="view-link label-view">فتح التكريم</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const clickSound = new Audio('https://www.soundjay.com/buttons/button-16.mp3');
+        function playClick() { clickSound.currentTime = 0; clickSound.play(); }
+
+        let currentLang = 'ar';
+        const translations = {
+            ar: { name: "خالد يوسف", visitors: "الزوار:", description: "مهتم بمساعدة الجميع من خلال خبرتي التقنية، أسعى لتوظيف مهاراتي في البرمجة والأمن السيبراني لبناء بيئة رقمية آمنة وحلول مبتكرة تخدم المجتمع.", skills: "المهارات", contact: "تواصل معي", work: "أعمالي", yt: "يوتيوب", tt: "تيك توك", view: "فتح الملف", work1: "اختبار الإنجليزية 2024", work2: "شهادة الإنجليزية 2025", work3: "المركز الأول 2023", toast: "تم النسخ بنجاح! ✅" },
+            en: { name: "Khalid Yusuf", visitors: "Visitors:", description: "Interested in helping everyone through my technical expertise, seeking to build a secure digital environment and innovative solutions.", skills: "Skills", contact: "Contact Me", work: "My Work", yt: "YouTube", tt: "TikTok", view: "Open File", work1: "English Test 2024", work2: "English Certificate 2025", work3: "First Place 2023", toast: "Copied successfully! ✅" }
+        };
+
+        document.getElementById('langBtn').onclick = () => {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            const data = translations[currentLang];
+            document.getElementById('name').textContent = data.name;
+            document.getElementById('label-visitors').textContent = data.visitors;
+            document.getElementById('description').textContent = data.description;
+            document.getElementById('label-skills').textContent = data.skills;
+            document.getElementById('label-contact').textContent = data.contact;
+            document.getElementById('label-work').textContent = data.work;
+            document.getElementById('label-yt').textContent = data.yt;
+            document.getElementById('label-tt').textContent = data.tt;
+            document.getElementById('work1-title').textContent = data.work1;
+            document.getElementById('work2-title').textContent = data.work2;
+            document.getElementById('work3-title').textContent = data.work3;
+            document.querySelectorAll('.label-view').forEach(el => el.textContent = data.view);
+            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            document.documentElement.lang = currentLang;
+            document.getElementById('langBtn').textContent = currentLang === 'ar' ? 'EN' : 'AR';
+            playClick();
+        };
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text);
+            const toast = document.getElementById('toast');
+            toast.style.opacity = '1';
+            setTimeout(() => { toast.style.opacity = '0'; }, 2000);
+            playClick();
+        }
+
+        const canvas = document.getElementById('particleCanvas'), ctx = canvas.getContext('2d');
+        let particles = [], theme = 'light';
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.onresize = resize; resize();
+
+        class Leaf {
+            constructor() { this.reset(); }
+            reset() { this.x = Math.random() * canvas.width; this.y = -20; this.size = Math.random() * 8 + 6; this.speed = Math.random() * 1 + 0.5; this.osc = Math.random() * 0.02; this.angle = Math.random() * Math.PI * 2; this.color = (Math.random() > 0.5) ? '#e67e22' : '#f1c40f'; this.swing = Math.random() * 2.5; }
+            update() { this.y += this.speed; this.x += Math.sin(this.y * this.osc) * this.swing; this.angle += 0.02; if (this.y > canvas.height) this.reset(); }
+            draw() {
+                ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle);
+                if (theme === 'light') { ctx.fillStyle = this.color; ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(this.size, -this.size, this.size * 2, 0); ctx.quadraticCurveTo(this.size, this.size, 0, 0); ctx.fill(); }
+                else { ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(0, 0, this.size/3, 0, Math.PI * 2); ctx.fill(); }
+                ctx.restore();
+            }
+        }
+        for(let i=0; i<60; i++) particles.push(new Leaf());
+        function animate() { ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+        animate();
+
+        document.querySelectorAll('.acc-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                const icon = header.querySelector('.fa-chevron-down');
+                if (content.style.maxHeight) { content.style.maxHeight = null; icon.classList.remove('rotate'); }
+                else { content.style.maxHeight = content.scrollHeight + "px"; icon.classList.add('rotate'); }
+            });
+        });
+
+        document.getElementById('themeBtn').onclick = () => {
+            theme = theme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            document.getElementById('themeIcon').className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+            playClick();
+        };
+    </script>
+</body>
+</html>
